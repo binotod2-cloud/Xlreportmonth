@@ -601,6 +601,11 @@
             background: linear-gradient(90deg, #f39c12 0%, #e67e22 100%);
             color: white;
         }
+        
+        .btn-info {
+            background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
     </style>
     
     <!-- External Libraries -->
@@ -1172,10 +1177,10 @@
                     <div class="expense-amount">${formatCurrency(expense.amount)}</div>
                     <div class="expense-desc">${expense.description}</div>
                     <div class="expense-actions">
-                        <button class="btn btn-warning btn-small" onclick="editExpenseItem('${expense.id}')">
+                        <button class="btn btn-warning btn-small" onclick="editExpense('${expense.id}')">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="btn btn-danger btn-small" onclick="removeExpenseItem('${expense.id}')">
+                        <button class="btn btn-danger btn-small" onclick="deleteExpense('${expense.id}')">
                             <i class="fas fa-trash"></i> Hapus
                         </button>
                     </div>
@@ -1187,9 +1192,13 @@
             expenseTotal.style.display = 'block';
         }
 
-        function editExpenseItem(id) {
-            const expense = expensesData.find(e => e.id === id);
-            if (!expense) return;
+        // FUNGSI EDIT PENGELUARAN
+        function editExpense(id) {
+            const expense = expensesData.find(e => e.id.toString() === id.toString());
+            if (!expense) {
+                console.error('Expense not found:', id);
+                return;
+            }
             
             // Tampilkan data di form untuk diedit
             document.getElementById('expenseDate').value = expense.date;
@@ -1197,7 +1206,7 @@
             document.getElementById('expenseDesc').value = expense.description;
             
             // Hapus item yang akan diedit dari array
-            expensesData = expensesData.filter(e => e.id !== id);
+            expensesData = expensesData.filter(e => e.id.toString() !== id.toString());
             updateExpenseList();
             
             // Fokus ke form
@@ -1206,9 +1215,10 @@
             showAlert('info', 'Pengeluaran siap diedit. Ubah data di atas dan klik "Tambah Pengeluaran"');
         }
 
-        function removeExpenseItem(id) {
+        // FUNGSI DELETE PENGELUARAN
+        function deleteExpense(id) {
             if (confirm('Apakah Anda yakin ingin menghapus pengeluaran ini?')) {
-                expensesData = expensesData.filter(e => e.id !== id);
+                expensesData = expensesData.filter(e => e.id.toString() !== id.toString());
                 updateExpenseList();
                 showAlert('success', 'Pengeluaran berhasil dihapus');
             }
@@ -1907,8 +1917,8 @@
         // EXPORT FUNCTIONS
         // ==============================================
         window.removeFile = removeFile;
-        window.editExpenseItem = editExpenseItem;
-        window.removeExpenseItem = removeExpenseItem;
+        window.editExpense = editExpense;
+        window.deleteExpense = deleteExpense;
 
         console.log('Sistem siap digunakan!');
     </script>
