@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Data Penjualan Excel</title>
+    
+    <!-- CSS Styles -->
+    <style>
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* HEADER */
+        .header {
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 5px solid #ff6b6b;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 30px;
+        }
+        
+        /* SECTION STYLES */
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* FORM STYLES */
+        .mode-selector {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .mode-option {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .mode-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .mode-option.selected {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+        
+        .mode-option h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .mode-option p {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        /* CHECKBOX OPTIONS */
+        .output-options {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .option-group h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+        
+        .checkbox-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checkbox-item label {
+            cursor: pointer;
+            font-weight: 500;
+            color: #2c3e50;
+            flex: 1;
+        }
+        
+        /* FILE UPLOAD */
+        .upload-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px dashed #3498db;
+        }
+        
+        .file-input-container {
+            margin-bottom: 20px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .file-item span {
+            flex: 1;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .file-item .file-size {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2980b9 0%, #1f639c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(90deg, #27ae60 0%, #219653 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(90deg, #219653 0%, #1e8749 100%);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        /* PROCESSING */
+        .processing-section {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* RESULTS */
+        .results-section {
+            display: none;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid;
+            transition: transform 0.3s ease;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .summary-card:nth-child(1) { border-color: #3498db; }
+        .summary-card:nth-child(2) { border-color: #27ae60; }
+        .summary-card:nth-child(3) { border-color: #e74c3c; }
+        .summary-card:nth-child(4) { border-color: #f39c12; }
+        .summary-card:nth-child(5) { border-color: #9b59b6; }
+        .summary-card:nth-child(6) { border-color: #1abc9c; }
+        
+        .summary-card h3 {
+            color: #7f8c8d;
+            font-size: 1em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .summary-card .value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .summary-card .subtext {
+            color: #95a5a6;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        /* TABLES */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .data-table th {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* SCROLLABLE TABLE */
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .table-container .data-table {
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            border-top: 1px solid #ecf0f1;
+            font-size: 0.9em;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .mode-selector, .output-options {
+                flex-direction: column;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        /* LOADING */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .loading.show {
+            display: flex;
+        }
+        
+        /* ALERTS */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .alert-success {
+            background: #d5f4e6;
+            border: 1px solid #27ae60;
+            color: #27ae60;
+        }
+        
+        .alert-error {
+            background: #fde8e8;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .alert-warning {
+            background: #fef9e7;
+            border: 1px solid #f39c12;
+            color: #f39c12;
+        }
+        
+        /* DOWNLOAD BUTTON */
+        .download-btn {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .btn-download {
+            background: linear-gradient(90deg, #9b59b6 0%, #8e44ad 100%);
+            padding: 15px 40px;
+            font-size: 1.1em;
+        }
+        
+        .btn-download:hover {
+            background: linear-gradient(90deg, #8e44ad 0%, #7d3c98 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(155, 89, 182, 0.3);
+        }
+        
+        /* FILE INFO */
+        .file-info {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .file-info h4 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .file-info p {
+            color: #5d6d7e;
+            margin: 5px 0;
+        }
+        
+        /* PERIOD INFO */
+        .period-info {
+            background: #e8f6f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #27ae60;
+            text-align: center;
+        }
+        
+        .period-info h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .period-info .period-range {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        /* ==============================================
+           STYLE FORM PENGELUARAN BARU
+           ============================================== */
+        .expense-form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        .expense-form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .expense-input {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .expense-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .expense-list-container {
+            margin-top: 20px;
+        }
+        
+        .expense-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 15px;
+            background: white;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .expense-date {
+            min-width: 100px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .expense-amount {
+            min-width: 120px;
+            color: #e74c3c;
+            font-weight: 700;
+        }
+        
+        .expense-desc {
+            flex: 1;
+            color: #34495e;
+        }
+        
+        .expense-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .expense-total {
+            background: #ffeaa7;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #d35400;
+            margin-top: 20px;
+            border: 2px solid #fdcb6e;
+        }
+        
+        .expense-empty {
+            text-align: center;
+            padding: 30px;
+            color: #95a5a6;
+            font-style: italic;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(90deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+    </style>
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading" id="loading">
+        <div>
+            <div class="spinner"></div>
+            <p>Memproses data...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <h1><i class="fas fa-chart-line"></i> Analisis Penjualan Excel + Pengeluaran</h1>
+            <p>Upload file Excel harian dan input pengeluaran operasional</p>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- STEP 1: MODE SELECTION -->
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-cogs"></i> Pilih Mode Pemrosesan</h2>
+                <div class="mode-selector">
+                    <div class="mode-option" data-mode="weekly">
+                        <h3><i class="fas fa-calendar-week"></i> Mingguan</h3>
+                        <p>Maksimal 7 file (Senin-Minggu)</p>
+                        <p>📅 Periode 7 hari</p>
+                    </div>
+                    <div class="mode-option selected" data-mode="monthly">
+                        <h3><i class="fas fa-calendar-alt"></i> Bulanan</h3>
+                        <p>Maksimal 30 file (1-30)</p>
+                        <p>📅 Periode 1 bulan</p>
+                    </div>
+                </div>
+                <div class="file-info" id="modeInfo">
+                    <h4><i class="fas fa-info-circle"></i> Mode Bulanan Dipilih</h4>
+                    <p>• Upload file Excel harian (format: jualkoperasi_DD_MM_YY.xlsx)</p>
+                    <p>• Maksimal 30 file untuk analisis 1 bulan penuh</p>
+                    <p>• File bisa kurang dari 30 (sesuai kebutuhan)</p>
+                </div>
+            </section>
+
+            <!-- STEP 2: OUTPUT OPTIONS -->
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-check-circle"></i> Pilih Output yang Diinginkan</h2>
+                <div class="output-options">
+                    <div class="option-group">
+                        <h4><i class="fas fa-users"></i> Data Pelanggan</h4>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="customersTop5" name="customersOutput" value="top5" checked>
+                            <label for="customersTop5">Top 5 Pelanggan</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="customersAll" name="customersOutput" value="all">
+                            <label for="customersAll">Semua Pelanggan</label>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <h4><i class="fas fa-shopping-cart"></i> Data Produk</h4>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="productsTop5" name="productsOutput" value="top5" checked>
+                            <label for="productsTop5">Top 5 Produk</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="productsAll" name="productsOutput" value="all">
+                            <label for="productsAll">Semua Produk</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-warning" id="outputWarning">
+                    <i class="fas fa-info-circle"></i> Pilih salah satu opsi untuk setiap kategori. Pilihan akan menentukan tampilan hasil di layar dan file Excel.
+                </div>
+            </section>
+
+            <!-- STEP 3: FILE UPLOAD -->
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-upload"></i> Upload File Excel</h2>
+                <div class="alert alert-warning" id="alertWarning">
+                    <i class="fas fa-exclamation-triangle"></i> Format file: <strong>jualkoperasi_DD_MM_YY.xlsx</strong>
+                </div>
+                
+                <div class="upload-section">
+                    <div id="fileList">
+                        <!-- File items will be added here dynamically -->
+                    </div>
+                    
+                    <div class="file-input-container">
+                        <button class="btn btn-primary" id="addFileBtn">
+                            <i class="fas fa-plus"></i> Tambah File Excel
+                        </button>
+                        <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none;" multiple>
+                    </div>
+                    
+                    <div class="alert alert-error" id="alertError" style="display:none;"></div>
+                </div>
+                
+                <div id="selectedFilesInfo" style="display:none;">
+                    <h4><i class="fas fa-file-excel"></i> File Terpilih:</h4>
+                    <div id="filesInfoList"></div>
+                </div>
+            </section>
+
+            <!-- STEP 4: FORM PENGELUARAN BARU -->
+            <section class="section" id="expenseSection">
+                <h2 class="section-title"><i class="fas fa-money-bill-wave"></i> Form Input Pengeluaran</h2>
+                
+                <div class="expense-form-container">
+                    <div class="expense-form-row">
+                        <input type="date" id="expenseDate" class="expense-input" value="">
+                        <input type="number" id="expenseAmount" class="expense-input" placeholder="Nominal (Rp)">
+                        <input type="text" id="expenseDesc" class="expense-input" placeholder="Keterangan (ex: Uang bensin)">
+                        <button class="btn btn-success" id="addExpenseBtn">
+                            <i class="fas fa-plus"></i> Tambah Pengeluaran
+                        </button>
+                    </div>
+                    
+                    <p style="color: #7f8c8d; font-size: 0.9em; margin-top: 10px;">
+                        <i class="fas fa-info-circle"></i> Data pengeluaran akan ditambahkan ke file Excel di bagian terpisah
+                    </p>
+                </div>
+                
+                <div class="expense-list-container">
+                    <h4 style="color: #2c3e50; margin-bottom: 15px;">
+                        <i class="fas fa-list"></i> Daftar Pengeluaran
+                    </h4>
+                    
+                    <div id="expenseList">
+                        <div class="expense-empty">
+                            <i class="fas fa-receipt" style="font-size: 2em; margin-bottom: 10px;"></i>
+                            <p>Belum ada data pengeluaran</p>
+                            <p style="font-size: 0.9em;">Tambahkan pengeluaran menggunakan form di atas</p>
+                        </div>
+                    </div>
+                    
+                    <div class="expense-total" id="expenseTotal" style="display: none;">
+                        TOTAL PENGELUARAN: <span id="totalExpenseAmount">Rp 0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 5: PROCESS BUTTON -->
+            <section class="section" style="text-align: center;">
+                <button class="btn btn-success" id="processBtn" style="padding: 15px 50px; font-size: 1.2em;">
+                    <i class="fas fa-play-circle"></i> PROSES SEMUA DATA
+                </button>
+                <p style="color: #7f8c8d; margin-top: 10px; font-size: 0.9em;">
+                    Klik untuk memproses file Excel + pengeluaran
+                </p>
+            </section>
+
+            <!-- PROCESSING SECTION -->
+            <section class="processing-section" id="processingSection">
+                <div class="spinner"></div>
+                <h3>Sedang memproses data...</h3>
+                <p id="processingStatus">Membaca file 1 dari 3</p>
+                <div style="width: 300px; height: 10px; background: #ecf0f1; border-radius: 5px; margin: 20px auto;">
+                    <div id="progressBar" style="width: 0%; height: 100%; background: #3498db; border-radius: 5px; transition: width 0.3s;"></div>
+                </div>
+            </section>
+
+            <!-- RESULTS SECTION -->
+            <section class="results-section" id="resultsSection">
+                <h2 class="section-title"><i class="fas fa-chart-bar"></i> Hasil Analisis</h2>
+                
+                <!-- PERIOD INFO -->
+                <div class="period-info" id="periodInfo">
+                    <h4><i class="fas fa-calendar"></i> Periode Analisis</h4>
+                    <div class="period-range" id="periodRange">-</div>
+                </div>
+                
+                <!-- SUMMARY CARDS - DITAMBAH 2 KARTU BARU -->
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <h3><i class="fas fa-money-bill-wave"></i> Total Omset</h3>
+                        <div class="value" id="totalOmset">Rp 0</div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <h3><i class="fas fa-coins"></i> Total Profit</h3>
+                        <div class="value" id="totalProfit">Rp 0</div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <h3><i class="fas fa-boxes"></i> Total Transaksi</h3>
+                        <div class="value" id="totalTransactions">0</div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <h3><i class="fas fa-shopping-cart"></i> Total Barang</h3>
+                        <div class="value" id="totalItems">0</div>
+                    </div>
+                    
+                    <!-- KARTU BARU -->
+                    <div class="summary-card">
+                        <h3><i class="fas fa-receipt"></i> Total Pengeluaran</h3>
+                        <div class="value" id="totalExpenses">Rp 0</div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <h3><i class="fas fa-calculator"></i> Profit Bersih</h3>
+                        <div class="value" id="netProfit">Rp 0</div>
+                        <div class="subtext">(Profit - Pengeluaran)</div>
+                    </div>
+                </div>
+
+                <!-- PELANGGAN SECTION -->
+                <div class="section" id="customersSection">
+                    <h2 class="section-title"><i class="fas fa-users"></i> <span id="customersTitle">Top 5 Pelanggan</span></h2>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Pelanggan</th>
+                                    <th>Total Belanja</th>
+                                    <th>Jumlah Transaksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTable">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PRODUK SECTION -->
+                <div class="section" id="productsSection">
+                    <h2 class="section-title"><i class="fas fa-star"></i> <span id="productsTitle">Top 5 Produk Terlaris</span></h2>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Produk</th>
+                                    <th>Jumlah Terjual</th>
+                                    <th>Total Omset</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTable">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PENGELUARAN SUMMARY SECTION BARU -->
+                <div class="section" id="expenseSummarySection">
+                    <h2 class="section-title"><i class="fas fa-receipt"></i> Ringkasan Pengeluaran</h2>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tanggal</th>
+                                    <th>Nominal</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenseSummaryTable">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="expense-total" style="margin-top: 20px;">
+                        TOTAL PENGELUARAN: <span id="summaryTotalExpense">Rp 0</span>
+                    </div>
+                </div>
+
+                <!-- DOWNLOAD BUTTON -->
+                <div class="download-btn">
+                    <button class="btn btn-download" id="downloadBtn">
+                        <i class="fas fa-file-excel"></i> Download Hasil (Excel)
+                    </button>
+                    <button class="btn btn-primary" id="resetBtn" style="margin-left: 15px;">
+                        <i class="fas fa-redo"></i> Analisis Baru
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p>Sistem Analisis Penjualan & Pengeluaran &copy; <span id="currentYear">2024</span> | Format file: jualkoperasi_DD_MM_YY.xlsx</p>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ==============================================
+        // INISIALISASI VARIABEL
+        // ==============================================
+        let selectedMode = 'monthly';
+        let uploadedFiles = [];
+        let expensesData = []; // ARRAY BARU UNTUK PENGELUARAN
+        
+        let outputOptions = {
+            customers: 'top5',
+            products: 'top5'
+        };
+        
+        let processedData = {
+            summary: {
+                totalOmset: 0,
+                totalProfit: 0,
+                totalTransactions: 0,
+                totalItems: 0,
+                startDate: null,
+                endDate: null
+            },
+            customers: [],
+            products: [],
+            dailyData: []
+        };
+
+        // ==============================================
+        // INISIALISASI DOM ELEMENTS
+        // ==============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set tahun di footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Set tanggal hari ini untuk form pengeluaran
+            document.getElementById('expenseDate').value = new Date().toISOString().split('T')[0];
+            
+            // Mode selection
+            document.querySelectorAll('.mode-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.mode-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedMode = this.dataset.mode;
+                    updateModeInfo();
+                });
+            });
+            
+            // Output options
+            document.getElementById('customersTop5').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('customersAll').checked = false;
+                    outputOptions.customers = 'top5';
+                }
+            });
+            
+            document.getElementById('customersAll').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('customersTop5').checked = false;
+                    outputOptions.customers = 'all';
+                }
+            });
+            
+            document.getElementById('productsTop5').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('productsAll').checked = false;
+                    outputOptions.products = 'top5';
+                }
+            });
+            
+            document.getElementById('productsAll').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('productsTop5').checked = false;
+                    outputOptions.products = 'all';
+                }
+            });
+            
+            // File upload
+            document.getElementById('addFileBtn').addEventListener('click', () => {
+                document.getElementById('fileInput').click();
+            });
+            
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+            
+            // Expense form
+            document.getElementById('addExpenseBtn').addEventListener('click', addExpense);
+            document.getElementById('expenseDesc').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addExpense();
+            });
+            
+            // Process button
+            document.getElementById('processBtn').addEventListener('click', processFiles);
+            
+            // Download button
+            document.getElementById('downloadBtn').addEventListener('click', downloadResults);
+            
+            // Reset button
+            document.getElementById('resetBtn').addEventListener('click', resetAnalysis);
+            
+            // Initialize
+            updateModeInfo();
+            updateExpenseList();
+        });
+
+        // ==============================================
+        // FUNGSI UTAMA
+        // ==============================================
+        function updateModeInfo() {
+            const maxFiles = selectedMode === 'weekly' ? 7 : 30;
+            const period = selectedMode === 'weekly' ? '7 hari (Senin-Minggu)' : '30 hari (1-30)';
+            
+            document.getElementById('modeInfo').innerHTML = `
+                <h4><i class="fas fa-info-circle"></i> Mode ${selectedMode === 'weekly' ? 'Mingguan' : 'Bulanan'} Dipilih</h4>
+                <p>• Upload file Excel harian (format: jualkoperasi_DD_MM_YY.xlsx)</p>
+                <p>• Maksimal ${maxFiles} file untuk analisis ${period}</p>
+                <p>• File bisa kurang dari ${maxFiles} (sesuai kebutuhan)</p>
+            `;
+            
+            document.getElementById('processBtn').innerHTML = 
+                `<i class="fas fa-play-circle"></i> PROSES DATA ${selectedMode.toUpperCase()}`;
+        }
+
+        // ==============================================
+        // FUNGSI FILE UPLOAD (SAMA SEPERTI AWAL)
+        // ==============================================
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            const maxFiles = selectedMode === 'weekly' ? 7 : 30;
+            
+            if (uploadedFiles.length + files.length > maxFiles) {
+                showError(`Maksimal ${maxFiles} file untuk mode ${selectedMode === 'weekly' ? 'mingguan' : 'bulanan'}`);
+                return;
+            }
+            
+            files.forEach(file => {
+                if (uploadedFiles.some(f => f.name === file.name)) {
+                    showError(`File "${file.name}" sudah diupload`);
+                    return;
+                }
+                
+                if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                    showError(`File "${file.name}" harus berformat Excel (.xlsx atau .xls)`);
+                    return;
+                }
+                
+                const fileId = Date.now() + Math.random();
+                uploadedFiles.push({
+                    id: fileId,
+                    file: file,
+                    name: file.name,
+                    size: formatFileSize(file.size)
+                });
+                
+                addFileToUI(fileId, file.name, file.size);
+            });
+            
+            updateFilesInfo();
+            e.target.value = '';
+        }
+
+        function addFileToUI(id, name, size) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.id = `file-${id}`;
+            fileItem.innerHTML = `
+                <i class="fas fa-file-excel" style="color: #27ae60; font-size: 1.2em;"></i>
+                <span>${name}</span>
+                <span class="file-size">${formatFileSize(size)}</span>
+                <button class="btn btn-danger" onclick="removeFile('${id}')" style="padding: 5px 10px;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            document.getElementById('fileList').appendChild(fileItem);
+        }
+
+        function removeFile(id) {
+            uploadedFiles = uploadedFiles.filter(file => file.id !== id);
+            const fileElement = document.getElementById(`file-${id}`);
+            if (fileElement) fileElement.remove();
+            updateFilesInfo();
+        }
+
+        function updateFilesInfo() {
+            const selectedFilesInfo = document.getElementById('selectedFilesInfo');
+            const filesInfoList = document.getElementById('filesInfoList');
+            
+            if (uploadedFiles.length > 0) {
+                selectedFilesInfo.style.display = 'block';
+                filesInfoList.innerHTML = uploadedFiles.map(file => `
+                    <div style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee;">
+                        <span>${file.name}</span>
+                        <span>${file.size}</span>
+                    </div>
+                `).join('');
+            } else {
+                selectedFilesInfo.style.display = 'none';
+            }
+        }
+
+        // ==============================================
+        // FUNGSI PENGELUARAN BARU
+        // ==============================================
+        function addExpense() {
+            const date = document.getElementById('expenseDate').value;
+            const amount = parseInt(document.getElementById('expenseAmount').value);
+            const description = document.getElementById('expenseDesc').value.trim();
+            
+            if (!date) {
+                alert('Tanggal harus diisi');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                alert('Nominal harus diisi dengan angka positif');
+                document.getElementById('expenseAmount').focus();
+                return;
+            }
+            
+            if (!description) {
+                alert('Keterangan harus diisi');
+                document.getElementById('expenseDesc').focus();
+                return;
+            }
+            
+            const expenseId = Date.now() + Math.random();
+            expensesData.push({
+                id: expenseId,
+                date: date,
+                amount: amount,
+                description: description
+            });
+            
+            document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseDesc').value = '';
+            document.getElementById('expenseDesc').focus();
+            
+            updateExpenseList();
+            showAlert('success', 'Pengeluaran berhasil ditambahkan');
+        }
+
+        function updateExpenseList() {
+            const expenseList = document.getElementById('expenseList');
+            const expenseTotal = document.getElementById('expenseTotal');
+            
+            if (expensesData.length === 0) {
+                expenseList.innerHTML = `
+                    <div class="expense-empty">
+                        <i class="fas fa-receipt" style="font-size: 2em; margin-bottom: 10px;"></i>
+                        <p>Belum ada data pengeluaran</p>
+                        <p style="font-size: 0.9em;">Tambahkan pengeluaran menggunakan form di atas</p>
+                    </div>
+                `;
+                expenseTotal.style.display = 'none';
+                return;
+            }
+            
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(amount);
+            };
+            
+            const formatDateDisplay = (dateStr) => {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric'
+                });
+            };
+            
+            expenseList.innerHTML = expensesData.map((expense, index) => `
+                <div class="expense-item" id="expense-${expense.id}">
+                    <div class="expense-date">${formatDateDisplay(expense.date)}</div>
+                    <div class="expense-amount">${formatCurrency(expense.amount)}</div>
+                    <div class="expense-desc">${expense.description}</div>
+                    <div class="expense-actions">
+                        <button class="btn btn-warning btn-small" onclick="editExpenseItem('${expense.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="removeExpenseItem('${expense.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            const total = expensesData.reduce((sum, expense) => sum + expense.amount, 0);
+            document.getElementById('totalExpenseAmount').textContent = formatCurrency(total);
+            expenseTotal.style.display = 'block';
+        }
+
+        function editExpenseItem(id) {
+            const expense = expensesData.find(e => e.id === id);
+            if (!expense) return;
+            
+            document.getElementById('expenseDate').value = expense.date;
+            document.getElementById('expenseAmount').value = expense.amount;
+            document.getElementById('expenseDesc').value = expense.description;
+            
+            expensesData = expensesData.filter(e => e.id !== id);
+            updateExpenseList();
+            document.getElementById('expenseAmount').focus();
+            
+            showAlert('info', 'Pengeluaran siap diedit. Ubah dan klik "Tambah Pengeluaran"');
+        }
+
+        function removeExpenseItem(id) {
+            if (confirm('Hapus pengeluaran ini?')) {
+                expensesData = expensesData.filter(e => e.id !== id);
+                updateExpenseList();
+                showAlert('success', 'Pengeluaran berhasil dihapus');
+            }
+        }
+
+        // ==============================================
+        // FUNGSI PROCESS DATA
+        // ==============================================
+        async function processFiles() {
+            if (uploadedFiles.length === 0) {
+                showError('Silakan upload minimal 1 file Excel');
+                return;
+            }
+            
+            showLoading(true);
+            document.getElementById('processingSection').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            processedData = {
+                summary: {
+                    totalOmset: 0,
+                    totalProfit: 0,
+                    totalTransactions: 0,
+                    totalItems: 0,
+                    startDate: null,
+                    endDate: null
+                },
+                customers: {},
+                products: {},
+                dailyData: []
+            };
+            // expensesData tetap dipertahankan
+            
+            try {
+                for (let i = 0; i < uploadedFiles.length; i++) {
+                    const fileData = uploadedFiles[i];
+                    updateProgress(i + 1, uploadedFiles.length, `Memproses ${fileData.name}`);
+                    const data = await readExcelFile(fileData.file);
+                    processFileData(data, fileData.name);
+                }
+                
+                calculateSummaries();
+                updateResultsUI();
+                
+                document.getElementById('processingSection').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'block';
+                showAlert('success', 'Data berhasil diproses!');
+                
+            } catch (error) {
+                showError(`Error: ${error.message}`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function readExcelFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const firstSheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[firstSheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        
+                        let headerRowIndex = 0;
+                        for (let i = 0; i < Math.min(10, jsonData.length); i++) {
+                            if (jsonData[i][0] === 'No') {
+                                headerRowIndex = i;
+                                break;
+                            }
+                        }
+                        
+                        const headers = jsonData[headerRowIndex];
+                        let rows = [];
+                        let fileProfit = 0;
+                        let fileOmset = 0;
+                        let fileDate = null;
+                        
+                        for (let i = headerRowIndex + 1; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            
+                            if (row[0] && typeof row[0] === 'string') {
+                                if (row[0].toLowerCase().includes('profit')) {
+                                    fileProfit = extractNumber(row[1]) || 0;
+                                }
+                                if (row[0].toLowerCase().includes('omset')) {
+                                    fileOmset = extractNumber(row[1]) || 0;
+                                }
+                                if (row[0].toLowerCase().includes('ringkasan')) {
+                                    break;
+                                }
+                            }
+                            
+                            if (row[0] && !isNaN(parseInt(row[0]))) {
+                                rows.push(row);
+                                if (!fileDate && row[2]) {
+                                    fileDate = parseDate(row[2]);
+                                }
+                            }
+                        }
+                        
+                        const result = rows.map(row => {
+                            const obj = {};
+                            headers.forEach((header, index) => {
+                                if (header && row[index] !== undefined) {
+                                    obj[header] = row[index];
+                                }
+                            });
+                            return obj;
+                        });
+                        
+                        resolve({
+                            fileName: file.name,
+                            data: result.filter(item => item.No && item.Tanggal),
+                            fileProfit: fileProfit,
+                            fileOmset: fileOmset,
+                            fileDate: fileDate
+                        });
+                    } catch (error) {
+                        reject(new Error(`Format file tidak valid: ${error.message}`));
+                    }
+                };
+                
+                reader.onerror = () => reject(new Error('Gagal membaca file'));
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            try {
+                const parts = dateStr.toString().split(/[-/\s]/);
+                if (parts.length >= 3) {
+                    const day = parseInt(parts[0]);
+                    const month = parseInt(parts[1]) - 1;
+                    const year = parts[2].length === 2 ? 2000 + parseInt(parts[2]) : parseInt(parts[2]);
+                    
+                    const date = new Date(year, month, day);
+                    if (!isNaN(date.getTime())) {
+                        return date;
+                    }
+                }
+                
+                const date = new Date(dateStr);
+                if (!isNaN(date.getTime())) {
+                    return date;
+                }
+                
+                return null;
+            } catch {
+                return null;
+            }
+        }
+
+        function extractNumber(value) {
+            if (!value) return 0;
+            const stringValue = value.toString();
+            const numericString = stringValue.replace(/[^\d.,]/g, '');
+            const cleanString = numericString.replace(/\./g, '').replace(',', '.');
+            return parseFloat(cleanString) || 0;
+        }
+
+        function processFileData(fileData, fileName) {
+            if (!fileData.data || fileData.data.length === 0) {
+                console.warn(`File ${fileName} tidak memiliki data valid`);
+                return;
+            }
+            
+            let dailyTransactions = new Set();
+            let dailyItems = 0;
+            
+            processedData.summary.totalOmset += fileData.fileOmset;
+            processedData.summary.totalProfit += fileData.fileProfit;
+            
+            if (fileData.fileDate) {
+                if (!processedData.summary.startDate || fileData.fileDate < processedData.summary.startDate) {
+                    processedData.summary.startDate = fileData.fileDate;
+                }
+                if (!processedData.summary.endDate || fileData.fileDate > processedData.summary.endDate) {
+                    processedData.summary.endDate = fileData.fileDate;
+                }
+            }
+            
+            fileData.data.forEach(row => {
+                try {
+                    const subtotal = parseFloat(row.Subtotal) || 0;
+                    const quantity = parseFloat(row['Jumlah Produk']) || 0;
+                    const customerName = (row['Nama Pelanggan'] || '').toString().trim();
+                    const transactionId = row['No. Struk'] || '';
+                    const productName = (row['Nama Produk'] || '').toString().trim();
+                    
+                    if (transactionId) {
+                        dailyTransactions.add(transactionId);
+                    }
+                    
+                    dailyItems += quantity;
+                    
+                    if (customerName && customerName !== '-') {
+                        if (!processedData.customers[customerName]) {
+                            processedData.customers[customerName] = {
+                                name: customerName,
+                                totalSpent: 0,
+                                transactions: new Set()
+                            };
+                        }
+                        processedData.customers[customerName].totalSpent += subtotal;
+                        if (transactionId) {
+                            processedData.customers[customerName].transactions.add(transactionId);
+                        }
+                    }
+                    
+                    if (productName) {
+                        if (!processedData.products[productName]) {
+                            processedData.products[productName] = {
+                                name: productName,
+                                totalSold: 0,
+                                totalRevenue: 0
+                            };
+                        }
+                        processedData.products[productName].totalSold += quantity;
+                        processedData.products[productName].totalRevenue += subtotal;
+                    }
+                    
+                } catch (error) {
+                    console.error(`Error processing row in ${fileName}:`, error);
+                }
+            });
+            
+            processedData.summary.totalTransactions += dailyTransactions.size;
+            processedData.summary.totalItems += dailyItems;
+            
+            processedData.dailyData.push({
+                fileName: fileName,
+                transactions: dailyTransactions.size,
+                items: dailyItems,
+                omset: fileData.fileOmset,
+                profit: fileData.fileProfit,
+                date: fileData.fileDate
+            });
+        }
+
+        function calculateSummaries() {
+            processedData.customers = Object.values(processedData.customers)
+                .map(cust => ({
+                    name: cust.name,
+                    totalSpent: cust.totalSpent,
+                    transactionCount: cust.transactions.size
+                }))
+                .sort((a, b) => b.totalSpent - a.totalSpent);
+            
+            processedData.products = Object.values(processedData.products)
+                .sort((a, b) => b.totalRevenue - a.totalRevenue);
+            
+            expensesData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        }
+
+        function updateResultsUI() {
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(amount);
+            };
+            
+            if (processedData.summary.startDate && processedData.summary.endDate) {
+                const startDate = formatDate(processedData.summary.startDate);
+                const endDate = formatDate(processedData.summary.endDate);
+                document.getElementById('periodRange').textContent = `${startDate} - ${endDate}`;
+            }
+            
+            const totalExpenses = expensesData.reduce((sum, expense) => sum + expense.amount, 0);
+            const netProfitValue = processedData.summary.totalProfit - totalExpenses;
+            
+            document.getElementById('totalOmset').textContent = formatCurrency(processedData.summary.totalOmset);
+            document.getElementById('totalProfit').textContent = formatCurrency(processedData.summary.totalProfit);
+            document.getElementById('totalTransactions').textContent = processedData.summary.totalTransactions.toLocaleString();
+            document.getElementById('totalItems').textContent = processedData.summary.totalItems.toLocaleString();
+            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('netProfit').textContent = formatCurrency(netProfitValue);
+            
+            updateCustomersTable();
+            updateProductsTable();
+            updateExpenseSummaryTable();
+        }
+
+        function updateCustomersTable() {
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(amount);
+            };
+            
+            let customersData;
+            let title;
+            
+            if (outputOptions.customers === 'top5') {
+                customersData = processedData.customers.slice(0, 5);
+                title = 'Top 5 Pelanggan';
+            } else {
+                customersData = processedData.customers;
+                title = 'Semua Pelanggan';
+            }
+            
+            document.getElementById('customersTitle').textContent = title;
+            document.getElementById('customersTable').innerHTML = customersData.map((customer, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><strong>${customer.name}</strong></td>
+                    <td>${formatCurrency(customer.totalSpent)}</td>
+                    <td>${customer.transactionCount}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateProductsTable() {
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(amount);
+            };
+            
+            let productsData;
+            let title;
+            
+            if (outputOptions.products === 'top5') {
+                productsData = processedData.products.slice(0, 5);
+                title = 'Top 5 Produk Terlaris';
+            } else {
+                productsData = processedData.products;
+                title = 'Semua Produk Terjual';
+            }
+            
+            document.getElementById('productsTitle').textContent = title;
+            document.getElementById('productsTable').innerHTML = productsData.map((product, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><strong>${product.name}</strong></td>
+                    <td>${product.totalSold.toLocaleString()}</td>
+                    <td>${formatCurrency(product.totalRevenue)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateExpenseSummaryTable() {
+            if (expensesData.length === 0) {
+                document.getElementById('expenseSummarySection').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('expenseSummarySection').style.display = 'block';
+            
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(amount);
+            };
+            
+            const formatDateDisplay = (dateStr) => {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric'
+                });
+            };
+            
+            document.getElementById('expenseSummaryTable').innerHTML = expensesData.map((expense, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${formatDateDisplay(expense.date)}</td>
+                    <td style="color: #e74c3c; font-weight: 600;">${formatCurrency(expense.amount)}</td>
+                    <td>${expense.description}</td>
+                </tr>
+            `).join('');
+            
+            const total = expensesData.reduce((sum, expense) => sum + expense.amount, 0);
+            document.getElementById('summaryTotalExpense').textContent = formatCurrency(total);
+        }
+
+        // ==============================================
+        // FUNGSI DOWNLOAD EXCEL (DITAMBAH PENGELUARAN)
+        // ==============================================
+        function downloadResults() {
+            try {
+                const wb = XLSX.utils.book_new();
+                
+                const formatCurrency = (amount) => {
+                    if (!amount || isNaN(amount)) return '';
+                    return `Rp ${Math.round(amount).toLocaleString('id-ID')}`;
+                };
+                
+                const formatNumber = (num) => {
+                    if (!num || isNaN(num)) return '';
+                    return num.toLocaleString('id-ID');
+                };
+                
+                const formatDateExcel = (dateStr) => {
+                    if (!dateStr) return '-';
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('id-ID', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                };
+                
+                let periodStr = '';
+                if (processedData.summary.startDate && processedData.summary.endDate) {
+                    const startDate = formatDate(processedData.summary.startDate);
+                    const endDate = formatDate(processedData.summary.endDate);
+                    periodStr = `${startDate} - ${endDate}`;
+                }
+                
+                const totalExpenses = expensesData.reduce((sum, expense) => sum + expense.amount, 0);
+                const netProfit = processedData.summary.totalProfit - totalExpenses;
+                
+                // SUMMARY SHEET dengan pengeluaran
+                const summaryData = [
+                    ['LAPORAN ANALISIS PENJUALAN & PENGELUARAN'],
+                    [`Periode: ${periodStr}`],
+                    [`Mode: ${selectedMode === 'weekly' ? 'Mingguan' : 'Bulanan'}`],
+                    [`Jumlah File Diproses: ${uploadedFiles.length}`],
+                    [`Jumlah Data Pengeluaran: ${expensesData.length}`],
+                    [`Opsi Output: Pelanggan=${outputOptions.customers === 'top5' ? 'Top 5' : 'Semua'}, Produk=${outputOptions.products === 'top5' ? 'Top 5' : 'Semua'}`],
+                    [],
+                    ['RINGKASAN UTAMA'],
+                    ['Total Omset', formatCurrency(processedData.summary.totalOmset)],
+                    ['Total Profit', formatCurrency(processedData.summary.totalProfit)],
+                    ['Total Pengeluaran', formatCurrency(totalExpenses)],
+                    ['NET PROFIT (Profit - Pengeluaran)', formatCurrency(netProfit)],
+                    ['Total Transaksi', formatNumber(processedData.summary.totalTransactions)],
+                    ['Total Barang Terjual', formatNumber(processedData.summary.totalItems)],
+                    [],
+                    [outputOptions.customers === 'top5' ? 'TOP 5 PELANGGAN' : 'DAFTAR SEMUA PELANGGAN'],
+                    ['No', 'Nama Pelanggan', 'Total Belanja', 'Jumlah Transaksi']
+                ];
+                
+                let customersForExport;
+                if (outputOptions.customers === 'top5') {
+                    customersForExport = processedData.customers.slice(0, 5);
+                } else {
+                    customersForExport = processedData.customers;
+                }
+                
+                customersForExport.forEach((cust, idx) => {
+                    summaryData.push([idx + 1, cust.name, formatCurrency(cust.totalSpent), formatNumber(cust.transactionCount)]);
+                });
+                
+                summaryData.push([], [outputOptions.products === 'top5' ? 'TOP 5 PRODUK TERLARIS' : 'DAFTAR SEMUA PRODUK TERJUAL']);
+                summaryData.push(['No', 'Nama Produk', 'Jumlah Terjual', 'Total Omset']);
+                
+                let productsForExport;
+                if (outputOptions.products === 'top5') {
+                    productsForExport = processedData.products.slice(0, 5);
+                } else {
+                    productsForExport = processedData.products;
+                }
+                
+                productsForExport.forEach((prod, idx) => {
+                    summaryData.push([idx + 1, prod.name, formatNumber(prod.totalSold), formatCurrency(prod.totalRevenue)]);
+                });
+                
+                // Tambah data pengeluaran ke summary
+                if (expensesData.length > 0) {
+                    summaryData.push([], ['RINGKASAN PENGELUARAN OPERASIONAL']);
+                    summaryData.push(['No', 'Tanggal', 'Nominal', 'Keterangan']);
+                    
+                    expensesData.forEach((expense, idx) => {
+                        summaryData.push([idx + 1, formatDateExcel(expense.date), formatCurrency(expense.amount), expense.description]);
+                    });
+                    
+                    summaryData.push([], ['TOTAL PENGELUARAN:', '', formatCurrency(totalExpenses), '']);
+                }
+                
+                const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+                wsSummary['!cols'] = [
+                    {wch: 5}, {wch: 30}, {wch: 20}, {wch: 15}
+                ];
+                XLSX.utils.book_append_sheet(wb, wsSummary, 'Ringkasan Utama');
+                
+                // CUSTOMERS SHEET
+                const customerHeaders = ['No', 'Nama Pelanggan', 'Total Belanja', 'Jumlah Transaksi'];
+                const customerRows = processedData.customers.map((cust, idx) => [
+                    idx + 1, cust.name, formatCurrency(cust.totalSpent), formatNumber(cust.transactionCount)
+                ]);
+                const wsCustomers = XLSX.utils.aoa_to_sheet([customerHeaders, ...customerRows]);
+                wsCustomers['!cols'] = [
+                    {wch: 5}, {wch: 30}, {wch: 20}, {wch: 15}
+                ];
+                XLSX.utils.book_append_sheet(wb, wsCustomers, 'Data Pelanggan');
+                
+                // PRODUCTS SHEET
+                const productHeaders = ['No', 'Nama Produk', 'Jumlah Terjual', 'Total Omset'];
+                const productRows = processedData.products.map((prod, idx) => [
+                    idx + 1, prod.name, formatNumber(prod.totalSold), formatCurrency(prod.totalRevenue)
+                ]);
+                const wsProducts = XLSX.utils.aoa_to_sheet([productHeaders, ...productRows]);
+                wsProducts['!cols'] = [
+                    {wch: 5}, {wch: 40}, {wch: 15}, {wch: 20}
+                ];
+                XLSX.utils.book_append_sheet(wb, wsProducts, 'Data Produk');
+                
+                // EXPENSES SHEET (BARU)
+                if (expensesData.length > 0) {
+                    const expenseHeaders = ['No', 'Tanggal', 'Nominal', 'Keterangan'];
+                    const expenseRows = expensesData.map((expense, idx) => [
+                        idx + 1, formatDateExcel(expense.date), formatCurrency(expense.amount), expense.description
+                    ]);
+                    
+                    expenseRows.push(['', 'TOTAL:', formatCurrency(totalExpenses), '']);
+                    
+                    const wsExpenses = XLSX.utils.aoa_to_sheet([expenseHeaders, ...expenseRows]);
+                    wsExpenses['!cols'] = [
+                        {wch: 5}, {wch: 12}, {wch: 20}, {wch: 30}
+                    ];
+                    XLSX.utils.book_append_sheet(wb, wsExpenses, 'Data Pengeluaran');
+                }
+                
+                // DAILY SUMMARY SHEET
+                const dailyHeaders = ['No', 'Tanggal', 'Nama File', 'Jumlah Transaksi', 'Jumlah Barang', 'Omset', 'Profit'];
+                const dailyRows = processedData.dailyData.map((day, idx) => [
+                    idx + 1,
+                    day.date ? formatDate(day.date) : '-',
+                    day.fileName,
+                    formatNumber(day.transactions),
+                    formatNumber(day.items),
+                    formatCurrency(day.omset),
+                    formatCurrency(day.profit)
+                ]);
+                
+                dailyRows.sort((a, b) => {
+                    if (a[1] === '-' || b[1] === '-') return 0;
+                    return a[1].localeCompare(b[1]);
+                });
+                
+                const wsDaily = XLSX.utils.aoa_to_sheet([dailyHeaders, ...dailyRows]);
+                wsDaily['!cols'] = [
+                    {wch: 5}, {wch: 12}, {wch: 25}, {wch: 15}, {wch: 15}, {wch: 20}, {wch: 20}
+                ];
+                XLSX.utils.book_append_sheet(wb, wsDaily, 'Data Harian');
+                
+                // Generate filename
+                const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+                let filename;
+                
+                if (selectedMode === 'weekly') {
+                    if (processedData.summary.startDate) {
+                        const startDay = processedData.summary.startDate.getDate().toString().padStart(2, '0');
+                        const month = (processedData.summary.startDate.getMonth() + 1).toString().padStart(2, '0');
+                        filename = `jualmingguankoperasi_${startDay}_${month}_${randomCode}.xlsx`;
+                    } else {
+                        const now = new Date();
+                        const day = now.getDate().toString().padStart(2, '0');
+                        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                        filename = `jualmingguankoperasi_${day}_${month}_${randomCode}.xlsx`;
+                    }
+                } else {
+                    if (processedData.summary.startDate) {
+                        const month = (processedData.summary.startDate.getMonth() + 1).toString().padStart(2, '0');
+                        filename = `jualbulanan_${month}_${randomCode}.xlsx`;
+                    } else {
+                        const now = new Date();
+                        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                        filename = `jualbulanan_${month}_${randomCode}.xlsx`;
+                    }
+                }
+                
+                XLSX.writeFile(wb, filename);
+                showAlert('success', `File ${filename} berhasil diunduh!`);
+                
+            } catch (error) {
+                showError(`Gagal membuat file Excel: ${error.message}`);
+            }
+        }
+
+        // ==============================================
+        // FUNGSI UTILITY
+        // ==============================================
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatDate(date) {
+            if (!date) return '';
+            return date.toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        function updateProgress(current, total, message) {
+            const percentage = (current / total) * 100;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+            document.getElementById('processingStatus').textContent = message || `Memproses ${current} dari ${total} file`;
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            } else {
+                loading.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function showError(message) {
+            const alertError = document.getElementById('alertError');
+            alertError.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+            alertError.style.display = 'block';
+            setTimeout(() => {
+                alertError.style.display = 'none';
+            }, 5000);
+        }
+
+        function showAlert(type, message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i> ${message}
+            `;
+            
+            const processSection = document.querySelector('.section:nth-child(5)');
+            processSection.appendChild(alertDiv);
+            alertDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 3000);
+        }
+
+        function resetAnalysis() {
+            if (confirm('Reset semua data?')) {
+                uploadedFiles = [];
+                processedData = {
+                    summary: {
+                        totalOmset: 0,
+                        totalProfit: 0,
+                        totalTransactions: 0,
+                        totalItems: 0,
+                        startDate: null,
+                        endDate: null
+                    },
+                    customers: [],
+                    products: [],
+                    dailyData: []
+                };
+                expensesData = [];
+                
+                document.getElementById('fileList').innerHTML = '';
+                document.getElementById('selectedFilesInfo').style.display = 'none';
+                document.getElementById('processingSection').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'none';
+                document.getElementById('expenseSummarySection').style.display = 'none';
+                document.getElementById('alertError').style.display = 'none';
+                document.getElementById('periodRange').textContent = '-';
+                
+                document.getElementById('expenseDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('expenseAmount').value = '';
+                document.getElementById('expenseDesc').value = '';
+                
+                updateExpenseList();
+                
+                document.getElementById('customersTop5').checked = true;
+                document.getElementById('customersAll').checked = false;
+                document.getElementById('productsTop5').checked = true;
+                document.getElementById('productsAll').checked = false;
+                outputOptions.customers = 'top5';
+                outputOptions.products = 'top5';
+                
+                document.getElementById('fileInput').value = '';
+                
+                updateFilesInfo();
+                showAlert('success', 'Sistem telah direset.');
+            }
+        }
+
+        // ==============================================
+        // EXPORT FUNCTIONS
+        // ==============================================
+        window.removeFile = removeFile;
+        window.editExpenseItem = editExpenseItem;
+        window.removeExpenseItem = removeExpenseItem;
+
+        console.log('Sistem siap digunakan!');
+    </script>
+</body>
+</html>
