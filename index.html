@@ -1016,7 +1016,7 @@
         }
 
         // ==============================================
-        // FUNGSI FILE UPLOAD (SAMA SEPERTI AWAL)
+        // FUNGSI FILE UPLOAD
         // ==============================================
         function handleFileSelect(e) {
             const files = Array.from(e.target.files);
@@ -1173,10 +1173,10 @@
                     <div class="expense-desc">${expense.description}</div>
                     <div class="expense-actions">
                         <button class="btn btn-warning btn-small" onclick="editExpenseItem('${expense.id}')">
-                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-edit"></i> Edit
                         </button>
                         <button class="btn btn-danger btn-small" onclick="removeExpenseItem('${expense.id}')">
-                            <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash"></i> Hapus
                         </button>
                     </div>
                 </div>
@@ -1191,19 +1191,23 @@
             const expense = expensesData.find(e => e.id === id);
             if (!expense) return;
             
+            // Tampilkan data di form untuk diedit
             document.getElementById('expenseDate').value = expense.date;
             document.getElementById('expenseAmount').value = expense.amount;
             document.getElementById('expenseDesc').value = expense.description;
             
+            // Hapus item yang akan diedit dari array
             expensesData = expensesData.filter(e => e.id !== id);
             updateExpenseList();
+            
+            // Fokus ke form
             document.getElementById('expenseAmount').focus();
             
-            showAlert('info', 'Pengeluaran siap diedit. Ubah dan klik "Tambah Pengeluaran"');
+            showAlert('info', 'Pengeluaran siap diedit. Ubah data di atas dan klik "Tambah Pengeluaran"');
         }
 
         function removeExpenseItem(id) {
-            if (confirm('Hapus pengeluaran ini?')) {
+            if (confirm('Apakah Anda yakin ingin menghapus pengeluaran ini?')) {
                 expensesData = expensesData.filter(e => e.id !== id);
                 updateExpenseList();
                 showAlert('success', 'Pengeluaran berhasil dihapus');
